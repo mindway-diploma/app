@@ -45,7 +45,7 @@ const Header = ({
         <View style={[
           styles.headerTop, 
           {paddingTop: insets.top, height: 70 + insets.top},
-          {backgroundColor}]}
+          {backgroundColor, elevation: backgroundColor === "white" ? 2 : 0},]}
         >
           <TouchableOpacity
             style={styles.headerButton}

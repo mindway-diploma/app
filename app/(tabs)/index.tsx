@@ -159,7 +159,8 @@ export default function HomeScreen() {
               ) : (
                 posts.map(post => (
                   <PostCard
-                    key={post._id}
+                  key={post._id}
+                    topic={post.topic}
                     id={post._id}
                     content={post.content}
                     user={{

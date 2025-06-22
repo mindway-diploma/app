@@ -20,6 +20,7 @@ interface PostCardProps {
         avatar: string;
     },
     date: string;
+    topic: string;
     time: string;
     images: string[];
     showFullContent: boolean;
@@ -29,6 +30,7 @@ interface PostCardProps {
     background?: string;
 }
 const PostCard = (props: PostCardProps) => {
+    console.log(props.topic);
     const [likesAmount, setLikesAmount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
     const [commentsAmount, setCommentsAmount] = useState(0);
@@ -59,22 +61,20 @@ const PostCard = (props: PostCardProps) => {
     };
 
     const handleCommentClick = () => {
-        if (pathname.includes("/user")) {
-            // router.push({
-            //     pathname: `/posts/[id]`,
-            //     params: {
-            //         id: props.id,
-            //         data: JSON.stringify({
-            //             content: props.content,
-            //             user: props.user,
-            //             date: props.date,
-            //             time: props.time,
-            //             images: props.images,
-            //             scrollToComment: true,
-            //         })
-            //     }
-            // })
-        }
+        router.push({
+            pathname: `/posts/[id]`,
+            params: {
+                id: props.id,
+                data: JSON.stringify({
+                    content: props.content,
+                    user: props.user,
+                    date: props.date,
+                    time: props.time,
+                    images: props.images,
+                    scrollToComment: true,
+                })
+            }
+        })
     }
     
     const toggleLike = async () => {
@@ -153,8 +153,10 @@ const PostCard = (props: PostCardProps) => {
         //     );
     }
     const fetchCommentsAmount = async () => {
-        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/comments/${props.id}/amount`);
+        console.log("FETCHING COMMENTS AMOUNT");
+        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/comments/post/${props.id}/count`);
         const data = await res.json();
+        console.log(data);
         setCommentsAmount(data.commentsCount)
     }
     useEffect(() => {
@@ -274,20 +276,21 @@ const PostCard = (props: PostCardProps) => {
                             <Text style={{fontFamily: FontFamily.gantari.medium, fontSize: 14}} numberOfLines={2}>{props.content}</Text>
                             <TouchableOpacity 
                                 style={{borderWidth: 1, borderColor: "#73843D", borderRadius: 30, alignSelf: "center", marginTop: 11, paddingVertical: 4, flexDirection: "row", gap: 7, alignItems: "center", justifyContent: "center", width: 168, left: -7}}
-                                // onPress={() => router.push({
-                                //     pathname: `/posts/[id]`,
-                                //     params: {
-                                //         id: props.id,
-                                //         data: JSON.stringify({
-                                //             content: props.content,
-                                //             user: props.user,
-                                //             date: props.date,
-                                //             time: props.time,
-                                //             images: props.images,
-                                //             scrollToComment: false
-                                //         })
-                                //     }
-                                // })}
+                                onPress={() => router.push({
+                                    pathname: `/posts/[id]`,
+                                    params: {
+                                        id: props.id,
+                                        data: JSON.stringify({
+                                            content: props.content,
+                                            user: props.user,
+                                            date: props.date,
+                                            time: props.time,
+                                            images: props.images,
+                                            scrollToComment: false,
+                                            topic: props.topic
+                                        })
+                                    }
+                                })}
                             >
                                 <Text style={{fontFamily: FontFamily.gantari.bold, color: "#73843D", fontSize: 16, top: -2}}>Read more</Text>
                                 <ReadMoreArrowIcon/>
